@@ -1,10 +1,26 @@
 import { Module } from '@nestjs/common';
-import { HttpController } from './http.controller';
-import { HttpService } from './http.service';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { CreateOrderService } from './create-order.service';
+import { OrderController } from './order.controller';
 
 @Module({
-  imports: [],
-  controllers: [HttpController],
-  providers: [HttpService],
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'KAFKA_SERVER',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            brokers: ['host.docker.internal:9094'],
+          },
+          consumer: {
+            groupId: 'http',
+          },
+        },
+      },
+    ]),
+  ],
+  controllers: [OrderController],
+  providers: [CreateOrderService],
 })
 export class HttpModule {}

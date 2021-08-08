@@ -26,5 +26,8 @@
         "tsConfigPath": "apps/http/tsconfig.app.json"
       }
     }
+  },
+  "generateOptions": {
+    "spec": "false"
   }
 }
