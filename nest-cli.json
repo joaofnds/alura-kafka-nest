@@ -1,22 +1,13 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/alura/src",
+  "sourceRoot": "apps/http/src",
   "monorepo": true,
-  "root": "apps/alura",
+  "root": "apps/http",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/alura/tsconfig.app.json"
+    "tsConfigPath": "apps/http/tsconfig.app.json"
   },
   "projects": {
-    "alura": {
-      "type": "application",
-      "root": "apps/alura",
-      "entryFile": "main",
-      "sourceRoot": "apps/alura/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/alura/tsconfig.app.json"
-      }
-    },
     "http": {
       "type": "application",
       "root": "apps/http",
