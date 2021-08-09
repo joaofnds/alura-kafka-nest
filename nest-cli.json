@@ -25,6 +25,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/http/tsconfig.app.json"
       }
+    },
+    "fraud-detector": {
+      "type": "application",
+      "root": "apps/fraud-detector",
+      "entryFile": "main",
+      "sourceRoot": "apps/fraud-detector/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/fraud-detector/tsconfig.app.json"
+      }
     }
   },
   "generateOptions": {
