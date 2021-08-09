@@ -10,12 +10,8 @@ import { OrderController } from './order.controller';
         name: 'KAFKA_SERVER',
         transport: Transport.KAFKA,
         options: {
-          client: {
-            brokers: ['host.docker.internal:9094'],
-          },
-          consumer: {
-            groupId: 'http',
-          },
+          client: { clientId: 'http', brokers: ['host.docker.internal:9094'] },
+          consumer: { groupId: 'http' },
         },
       },
     ]),
