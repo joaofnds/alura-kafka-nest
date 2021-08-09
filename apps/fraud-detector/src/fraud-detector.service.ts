@@ -1,4 +1,9 @@
-import { Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 import { Producer } from '@nestjs/microservices/external/kafka.interface';
 import { Order } from './order.entity';

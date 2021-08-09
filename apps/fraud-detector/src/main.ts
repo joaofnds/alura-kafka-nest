@@ -1,20 +1,14 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { MicroserviceOptions } from '@nestjs/microservices';
 import { FraudDetectorModule } from './fraud-detector.module';
+import microserviceOptions from './microservice.options';
 
 async function bootstrap() {
   const microsservice =
     await NestFactory.createMicroservice<MicroserviceOptions>(
       FraudDetectorModule,
-      {
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            brokers: ['localhost:9094'],
-          },
-        },
-      },
+      microserviceOptions,
     );
 
   microsservice.useGlobalPipes(new ValidationPipe({ transform: true }));

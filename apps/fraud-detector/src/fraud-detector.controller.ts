@@ -1,4 +1,4 @@
-import { Controller, ValidationPipe } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { KafkaCheckFraudDTO } from './check-fraud.dto';
 import { FraudDetectorService } from './fraud-detector.service';

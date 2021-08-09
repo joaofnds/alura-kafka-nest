@@ -12,7 +12,7 @@ export class Order {
   @IsCurrency()
   amount: number;
 
-  toPlain(): object {
+  toPlain(): Record<string, unknown> {
     return classToPlain(this);
   }
 
