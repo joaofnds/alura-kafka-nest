@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import { OrderDTO } from './order.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -8,7 +8,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @MessagePattern('ECOMMERCE_NEW_ORDER')
+  @EventPattern('ECOMMERCE_NEW_ORDER')
   async createUser(@Payload('value') order: OrderDTO): Promise<void> {
     const user = new User(order.email);
     this.userService.createUserIfNotExists(user);
