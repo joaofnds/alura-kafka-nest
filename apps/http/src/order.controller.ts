@@ -25,8 +25,8 @@ export class OrderController {
   async generateReadingReport(): Promise<void> {
     await lastValueFrom(
       this.kafkaClient.emit(
-        'SEND_MESSAGE_TO_ALL_USERS',
-        'USER_GENERATE_READING_REPORT',
+        'ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS',
+        'ECOMMERCE_USER_GENERATE_READING_REPORT',
       ),
     );
   }

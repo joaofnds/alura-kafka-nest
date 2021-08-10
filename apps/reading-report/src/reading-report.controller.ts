@@ -6,8 +6,8 @@ import { ReadingReportService } from './reading-report.service';
 export class ReadingReportController {
   constructor(private readonly readingReportService: ReadingReportService) {}
 
-  @EventPattern('USER_GENERATE_READING_REPORT')
-  async getHello(@Payload('value') email: string): Promise<void> {
+  @EventPattern('ECOMMERCE_USER_GENERATE_READING_REPORT')
+  async generateReportFor(@Payload('value') email: string): Promise<void> {
     this.readingReportService.generateReportFor(email);
   }
 }

@@ -14,7 +14,7 @@ export class UserController {
     this.userService.createUserIfNotExists(user);
   }
 
-  @EventPattern('SEND_MESSAGE_TO_ALL_USERS')
+  @EventPattern('ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS')
   async sendMessageToAllUsers(
     @Payload('value') message: string,
   ): Promise<void> {
