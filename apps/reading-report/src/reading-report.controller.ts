@@ -8,6 +8,6 @@ export class ReadingReportController {
 
   @EventPattern('USER_GENERATE_READING_REPORT')
   async getHello(@Payload('value') email: string): Promise<void> {
-    this.readingReportService.genereteReportFor(email);
+    this.readingReportService.generateReportFor(email);
   }
 }
