@@ -1,29 +1,10 @@
-import {
-  Inject,
-  Injectable,
-  OnModuleDestroy,
-  OnModuleInit,
-} from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
-import { Producer } from '@nestjs/microservices/external/kafka.interface';
+import { KafkaDispatcher } from '@app/kafka';
+import { Injectable } from '@nestjs/common';
 import { CreateOrderDTO } from './create-order.dto';
 
 @Injectable()
-export class CreateOrderService implements OnModuleInit, OnModuleDestroy {
-  private producer: Producer;
-
-  constructor(
-    @Inject('KAFKA_SERVER')
-    private readonly kafkaClient: ClientKafka,
-  ) {}
-
-  async onModuleInit() {
-    this.producer = await this.kafkaClient.connect();
-  }
-
-  async onModuleDestroy() {
-    await this.kafkaClient.close();
-  }
+export class CreateOrderService {
+  constructor(private readonly dispatcher: KafkaDispatcher) {}
 
   async createOrder(createOrderDTO: CreateOrderDTO) {
     this.dispatchOrder(createOrderDTO);
@@ -31,30 +12,18 @@ export class CreateOrderService implements OnModuleInit, OnModuleDestroy {
   }
 
   private async dispatchOrder(createOrderDTO: CreateOrderDTO): Promise<void> {
-    await this.producer.send({
-      topic: 'ECOMMERCE_NEW_ORDER',
-      messages: [
-        {
-          key: createOrderDTO.email,
-          value: createOrderDTO.toString(),
-        },
-      ],
-      acks: 1,
-      timeout: 500,
-    });
+    await this.dispatcher.send(
+      'ECOMMERCE_NEW_ORDER',
+      createOrderDTO.email,
+      createOrderDTO.toString(),
+    );
   }
 
   private async dispatchEmail(receiverEmail: string): Promise<void> {
-    await this.producer.send({
-      topic: 'ECOMMERCE_SEND_EMAIL',
-      messages: [
-        {
-          key: receiverEmail,
-          value: 'Thank you for your order! We are processing your order!',
-        },
-      ],
-      acks: 1,
-      timeout: 500,
-    });
+    await this.dispatcher.send(
+      'ECOMMERCE_SEND_EMAIL',
+      receiverEmail,
+      'Thank you for your order! We are processing your order!',
+    );
   }
 }
