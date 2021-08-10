@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ClientsModule } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import microserviceConfig from './microservice.config';
 import { UserController } from './user.controller';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -17,6 +19,7 @@ import { UserService } from './user.service';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User]),
+    ClientsModule.register([{ name: 'KAFKA_SERVER', ...microserviceConfig }]),
   ],
   controllers: [UserController],
   providers: [UserService],
