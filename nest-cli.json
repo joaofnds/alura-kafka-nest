@@ -52,6 +52,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/user/tsconfig.app.json"
       }
+    },
+    "reading-report": {
+      "type": "application",
+      "root": "apps/reading-report",
+      "entryFile": "main",
+      "sourceRoot": "apps/reading-report/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/reading-report/tsconfig.app.json"
+      }
     }
   }
 }
