@@ -1,37 +1,16 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  OnModuleDestroy,
-  OnModuleInit,
-} from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
-import { Kafka } from '@nestjs/microservices/external/kafka.interface';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Producer } from 'kafkajs';
+import { KafkaDispatcher } from '@app/kafka';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
 @Injectable()
-export class UserService implements OnModuleInit, OnModuleDestroy {
-  producer: Producer;
-
+export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    @Inject('KAFKA_SERVER')
-    private readonly kafkaClient: ClientKafka,
+    private readonly dispatcher: KafkaDispatcher,
   ) {}
-
-  onModuleInit() {
-    const client = this.kafkaClient.createClient<Kafka>();
-    this.producer = client.producer();
-    this.producer.connect();
-  }
-
-  onModuleDestroy() {
-    this.producer.disconnect();
-  }
 
   async createUserIfNotExists(user: User): Promise<User> {
     try {
@@ -58,12 +37,7 @@ export class UserService implements OnModuleInit, OnModuleDestroy {
       .stream();
 
     email$.on('data', ({ email }: { email: string }) =>
-      this.producer.send({
-        topic: message,
-        messages: [{ key: email, value: email }],
-        acks: 1,
-        timeout: 500,
-      }),
+      this.dispatcher.send(message, email, email),
     );
   }
 }
