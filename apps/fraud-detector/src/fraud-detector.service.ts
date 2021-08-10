@@ -1,29 +1,10 @@
-import {
-  Inject,
-  Injectable,
-  OnModuleDestroy,
-  OnModuleInit,
-} from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
-import { Producer } from '@nestjs/microservices/external/kafka.interface';
+import { KafkaDispatcher } from '@app/kafka';
+import { Injectable } from '@nestjs/common';
 import { Order } from './order.entity';
 
 @Injectable()
-export class FraudDetectorService implements OnModuleInit, OnModuleDestroy {
-  producer: Producer;
-
-  constructor(
-    @Inject('KAFKA_SERVER')
-    private readonly kafkaClient: ClientKafka,
-  ) {}
-
-  async onModuleInit() {
-    this.producer = await this.kafkaClient.connect();
-  }
-
-  async onModuleDestroy() {
-    await this.kafkaClient.close();
-  }
+export class FraudDetectorService {
+  constructor(private readonly dispatcher: KafkaDispatcher) {}
 
   async checkFraud(order: Order) {
     if (this.isFraud(order)) {
@@ -38,30 +19,18 @@ export class FraudDetectorService implements OnModuleInit, OnModuleDestroy {
   }
 
   private async dispatchOrderRejected(order: Order): Promise<void> {
-    await this.producer.send({
-      topic: 'ECOMMERCE_ORDER_REJECTED',
-      messages: [
-        {
-          key: order.email,
-          value: order.toString(),
-        },
-      ],
-      acks: 1,
-      timeout: 500,
-    });
+    await this.dispatcher.send(
+      'ECOMMERCE_ORDER_REJECTED',
+      order.email,
+      order.toString(),
+    );
   }
 
   private async dispatchOrderApproved(order: Order): Promise<void> {
-    await this.producer.send({
-      topic: 'ECOMMERCE_ORDER_APPROVED',
-      messages: [
-        {
-          key: order.email,
-          value: order.toString(),
-        },
-      ],
-      acks: 1,
-      timeout: 500,
-    });
+    await this.dispatcher.send(
+      'ECOMMERCE_ORDER_APPROVED',
+      order.email,
+      order.toString(),
+    );
   }
 }
