@@ -7,8 +7,12 @@ import { UserService } from './user.service';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: './data/users.sqlite',
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'postgres',
+      database: 'users',
       entities: [User],
       synchronize: true,
     }),
